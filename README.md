@@ -1,7 +1,7 @@
 #Notepad
 React App - Personal Project
 
--Emotion
+-Emotion Styled Components
 -react-uuid
 -LocalStorage
 
