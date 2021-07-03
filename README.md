@@ -1,6 +1,8 @@
 #Notepad
 React App - Personal Project
 
--Dependencies:
-Emotion
-react-uuid
+-Emotion
+-react-uuid
+-LocalStorage
+
+Link: https://gifted-bohr-e844c6.netlify.app/
