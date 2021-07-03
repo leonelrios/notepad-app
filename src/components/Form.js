@@ -1,114 +1,106 @@
-import React, { useState } from 'react';
-import Error from './Error';
-import PropTypes from 'prop-types';
-import uuid from 'react-uuid';
-import styled from '@emotion/styled';
+import React, { useState } from "react";
+import Error from "./Error";
+import PropTypes from "prop-types";
+import uuid from "react-uuid";
+import styled from "@emotion/styled";
 
 const FormNote = styled.form`
-    background-color: #4D4B4B;
-    border-radius: 10px;
+  background-color: #4d4b4b;
+  border-radius: 10px;
 `;
 
-const Form = ({newNotes}) => {
+const Form = ({ newNotes }) => {
+  const [error, setError] = useState(false);
 
-    const [error, setError] = useState(false);
+  const [note, setNote] = useState({
+    title: "",
+    text: "",
+    date: "",
+  });
 
-    const [note, setNote] = useState({
-        title: '',
-        text: '',
-        date: ''
+  const { title, text, date } = note;
+
+  const handleChange = (e) => {
+    setNote({
+      ...note,
+      [e.target.name]: e.target.value,
     });
+  };
 
-    const {title, text, date} = note;
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-    const handleChange = e => {
-
-        setNote({
-            ...note,
-            [e.target.name]: e.target.value
-        })
-
+    if (title.trim() === "" || text.trim() === "" || date.trim() === "") {
+      setError(true);
+      return;
     }
 
-    const handleSubmit = e =>{
-        e.preventDefault();
+    setError(false);
 
-        if(title.trim() === '' || text.trim() === '' || date.trim() === ''){
-            setError(true);
-            return;
-        }
+    note.id = uuid();
+    newNotes(note);
 
-        setError(false);
+    setNote({
+      title: "",
+      text: "",
+      date: "",
+    });
+  };
 
-        note.id = uuid();
-        newNotes(note);
+  return (
+    <FormNote className="col s12 m8 offset-m2" onSubmit={handleSubmit}>
+      {error ? <Error message="Complete all fields" /> : null}
 
-        setNote({
-            title: '',
-            text: '',
-            date: ''
-        })
+      <div className="input-field">
+        <input
+          className="white-text"
+          type="text"
+          name="title"
+          id="title"
+          value={title}
+          onChange={handleChange}
+        />
+        <label htmlFor="title">Title:</label>
+      </div>
 
-    }
-    
-    return ( 
-        <FormNote 
-            className="col s12 m8 offset-m2"
-            onSubmit={handleSubmit}
-            >
+      <div className="input-field">
+        <textarea
+          className="white-text"
+          name="text"
+          placeholder="Note"
+          value={text}
+          onChange={handleChange}
+        ></textarea>
+      </div>
 
-            {error ? <Error message="Complete all fields" /> : null}
+      <div className="input-field">
+        <input
+          className="white-text"
+          type="date"
+          name="date"
+          id="date"
+          value={date}
+          onChange={handleChange}
+        />
+        <label htmlFor="title">Date: </label>
+      </div>
 
-            <div className="input-field">
-                <input
-                    className="white-text"
-                    type="text"
-                    name="title"
-                    id="title"
-                    value={title}
-                    onChange={handleChange}
-                />
-                <label htmlFor="title">Title:</label>
-            </div>
-
-            <div className="input-field">
-                <textarea
-                    className="white-text"
-                    name="text"
-                    placeholder="Note"
-                    value={text}
-                    onChange={handleChange}
-                >
-                </textarea>
-            </div>
-
-            <div className="input-field">
-                <input 
-                    className="white-text"
-                    type="date"
-                    name="date"
-                    id="date"
-                    value={date}
-                    onChange={handleChange}
-                />
-                <label htmlFor="title">Date: </label>
-            </div>
-
-            <div className="input-field center-align">
-                <button
-                    className="waves-effect waves-light btn light-blue darken-4"
-                    type="submit"
-                >add note
-                <i className="material-icons right">add</i>
-                </button>
-            </div>
-
-        </FormNote>
-     );
-}
+      <div className="input-field center-align">
+        <button
+          className="waves-effect waves-light btn light-blue darken-4"
+          type="submit"
+        >
+          add note
+          <i className="material-icons right">add</i>
+        </button>
+      </div>
+      
+    </FormNote>
+  );
+};
 
 Form.propTypes = {
-    newNotes: PropTypes.func.isRequired
-}
- 
+  newNotes: PropTypes.func.isRequired,
+};
+
 export default Form;
